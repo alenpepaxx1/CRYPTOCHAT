@@ -41,24 +41,6 @@ async function startServer() {
     crossOriginEmbedderPolicy: false,
   }));
 
-  const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 200, // Limit each IP to 200 requests per windowMs
-    standardHeaders: true,
-    legacyHeaders: false,
-    message: { error: "Too many requests, please try again later." },
-    validate: { xForwardedForHeader: false }
-  });
-  app.use(limiter);
-
-  // Stricter rate limit for authentication
-  const authLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 30, // 30 requests per 15 minutes
-    message: { error: "Too many authentication attempts, please try again later." },
-    validate: { xForwardedForHeader: false }
-  });
-
   // === REST API ROUTES ===
   const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-key-123';
 
@@ -175,7 +157,7 @@ async function startServer() {
   });
 
   // Login with Alias (No password)
-  app.post('/api/auth/alias', authLimiter, (req, res) => {
+  app.post('/api/auth/alias', (req, res) => {
     const { username } = req.body;
     if (!username) return res.status(400).json({ error: 'Alias required' });
     
@@ -202,9 +184,16 @@ async function startServer() {
   });
 
   // Signup with password
-  app.post('/api/auth/signup', authLimiter, (req, res) => {
-    const { username, password } = req.body;
+  app.post('/api/auth/signup', (req, res) => {
+    const { username, password, adminCode } = req.body;
     if (!username || !password) return res.status(400).json({ error: 'Username and password required' });
+
+    const userCount: any = db.prepare('SELECT COUNT(*) as count FROM users').get();
+    const isFirstUser = userCount.count === 0;
+    
+    // Default admin code if not provided in ENV
+    const SECRET_ADMIN_CODE = process.env.ADMIN_SIGNUP_CODE || 'MATRIX_ADMIN_2026';
+    const wantsAdmin = adminCode === SECRET_ADMIN_CODE;
 
     let user = db.prepare('SELECT * FROM users WHERE username = ?').get(username);
     const hash = crypto.createHash('sha256').update(password).digest('hex');
@@ -214,11 +203,13 @@ async function startServer() {
         return res.status(409).json({ error: 'Username already taken' });
       } else {
         // Upgrade guest to full user
-        db.prepare('UPDATE users SET password = ?, is_guest = 0 WHERE id = ?').run(hash, (user as any).id);
+        const isAdmin = isFirstUser || wantsAdmin ? 1 : 0;
+        db.prepare('UPDATE users SET password = ?, is_guest = 0, is_admin = ? WHERE id = ?').run(hash, isAdmin, (user as any).id);
       }
     } else {
       const id = crypto.randomUUID();
-      db.prepare('INSERT INTO users (id, username, password, is_guest) VALUES (?, ?, ?, 0)').run(id, username, hash);
+      const isAdmin = isFirstUser || wantsAdmin ? 1 : 0;
+      db.prepare('INSERT INTO users (id, username, password, is_guest, is_admin) VALUES (?, ?, ?, 0, ?)').run(id, username, hash, isAdmin);
     }
     
     user = db.prepare('SELECT * FROM users WHERE username = ?').get(username);
@@ -227,7 +218,7 @@ async function startServer() {
   });
 
   // Login with password
-  app.post('/api/auth/login', authLimiter, (req, res) => {
+  app.post('/api/auth/login', (req, res) => {
     const { username, password } = req.body;
     if (!username || !password) return res.status(400).json({ error: 'Username and password required' });
     
