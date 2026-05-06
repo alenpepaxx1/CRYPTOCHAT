@@ -1,20 +1,45 @@
 <div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+<img width="1200" height="475" alt="GHBanner" src="example" />
 </div>
 
-# Run and deploy your AI Studio app
+# BAZAAR_LINK MATRIX
 
-This contains everything you need to run your app locally.
+A modern, high-security decentralized trade and communication platform.
 
-View your app in AI Studio: https://ai.studio/apps/053b5ff3-d287-4a64-9351-ac001bb0e954
+## Overview
 
-## Run Locally
+BAZAAR_LINK MATRIX is a next-generation web application designed for secure communication and digital asset exchange. Built with a focus on tactical design and robust architecture, it provides a command-center experience for users to interact within a decentralized grid.
 
-**Prerequisites:**  Node.js
+## Key Features
 
+- **Command Center (Home)**: A high-tech dashboard monitoring system health and providing quick access to all modules.
+- **Global Communications (Chat)**: Encrypted messaging channels for secure information exchange.
+- **Digital Bazaar (Marketplace)**: A decentralized marketplace for trading digital assets with verified escrow.
+- **Tactical Security**: Zero-trust protocol implementation with proxy layered connections and biometric identity simulation.
+- **System Metrics**: Real-time tracking of active personas, asset listings, and network signals.
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Technical Stack
+
+- **Frontend**: React 18+ with TypeScript
+- **Styling**: Tailwind CSS with custom thematic variables
+- **Animations**: Motion (framer-motion)
+- **Icons**: Lucide React
+- **Backend**: Node.js with Express
+- **Database**: SQLite (better-sqlite3)
+- **Real-time**: Socket.io
+
+## Interface Design
+
+The application follows a "Tactical/Brutalist" aesthetic, utilizing:
+- High-contrast dark modes (`#050505` background)
+- Gold-gradient accenting for priority UI elements
+- Monospaced typography for technical data visualization
+- Backdrop-blur glassmorphism effects
+
+---
+
+## Copyright
+
+**Copyright © 2026 Alen Pepa. All Rights Reserved.**
+
+This software and its associated code are the exclusive property of Alen Pepa. Unauthorized reproduction, distribution, or modification is strictly prohibited.
