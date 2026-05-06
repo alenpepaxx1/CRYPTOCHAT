@@ -36,6 +36,10 @@ The application follows a "Tactical/Brutalist" aesthetic, utilizing:
 - Monospaced typography for technical data visualization
 - Backdrop-blur glassmorphism effects
 
+
+## About Admin Access 
+First, you must register with the username ADMIN and set a password, so that you reserve full access to the app, and no one else has this right.
+
 ---
 
 ## Copyright
