@@ -1,5 +1,5 @@
 <div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://i.ibb.co/BKdZgqQd/screencapture-localhost-3000-2026-05-06-12-42-11.png" />
+<img width="1920" height="1080" alt="CRYPTOCHAT" src="https://i.ibb.co/BKdZgqQd/screencapture-localhost-3000-2026-05-06-12-42-11.png" />
 </div>
 
 # BAZAAR_LINK MATRIX
